@@ -34,8 +34,8 @@ startup_conjur_service() {
 	kubectl config use-context conjur
 
 	# start up conjur services from yaml
-	kubectl create -f $CONFIG_DIR/conjur-master-headless.yaml
-
+	kubectl create -f $CONFIG_DIR/conjur-master-headless.yaml \
+	  --validate=false
 	# give containers time to get running
 	echo "Waiting for conjur-master-0 to launch"
 	sleep 5
@@ -101,7 +101,8 @@ start_load_balancer() {
 	kubectl config use-context conjur
 
 	# start up load balancer
-	kubectl create -f $CONFIG_DIR/haproxy-conjur-master.yaml
+	kubectl create -f $CONFIG_DIR/haproxy-conjur-master.yaml \
+          --validate=false
 
 	sleep 5
 }

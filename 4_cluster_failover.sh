@@ -38,7 +38,8 @@ delete_current_master() {
 		exit 1
 	fi
 	# replace old master w/ unconfigured pod
-	kubectl get pod $OLD_MASTER_POD -o yaml | kubectl replace --force -f -
+	kubectl get pod $OLD_MASTER_POD -o yaml | kubectl replace --force -f - /
+	  --validate=false
 	kubectl label --overwrite pod $OLD_MASTER_POD role=unset
 }
 
@@ -152,11 +153,9 @@ configure_new_standby() {
 	# get master pod IP address
 	master_pod=$(kubectl get pods -lrole=master -o jsonpath="{.items[*].metadata.name}")
 	master_ip=$(kubectl describe pod $master_pod | awk '/IP:/ { print $2 }')
+
 	# make sure replaced master pod is running
 	new_pod=$(kubectl get pod -lrole=unset -o jsonpath="{.items[*].metadata.name}")
-	while [[ $(kubectl get pod $new_pod --no-headers | awk "{print \$3}") != 'Running' ]]; do	
-		sleep 5
-	done
 
 	# copy seed file, unpack and configure
  	kubectl cp ./$CONFIG_DIR/standby-seed.tar $new_pod:/tmp/standby-seed.tar
