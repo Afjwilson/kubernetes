@@ -16,4 +16,5 @@ kubectl delete --ignore-not-found=true configmap cli-conjur
 kubectl create configmap cli-conjur \
   --from-literal=ssl_certificate="$ssl_certificate"
 
-kubectl create -f cli-conjur.yaml
+kubectl create -f cli-conjur.yaml \
+  --validate=false

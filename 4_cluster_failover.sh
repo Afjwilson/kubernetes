@@ -38,7 +38,8 @@ delete_current_master() {
 		exit 1
 	fi
 	# replace old master w/ unconfigured pod
-	kubectl get pod $OLD_MASTER_POD -o yaml | kubectl replace --force -f -
+	kubectl get pod $OLD_MASTER_POD -o yaml | kubectl replace --force -f - /
+	  --validate=false
 	kubectl label --overwrite pod $OLD_MASTER_POD role=unset
 }
 

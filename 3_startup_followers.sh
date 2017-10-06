@@ -6,7 +6,8 @@ declare CONFIG_DIR=./conjur-service
 kubectl config use-context conjur
 
 main() {
-	kubectl create -f $CONFIG_DIR/conjur-follower.yaml
+	kubectl create -f $CONFIG_DIR/conjur-follower.yaml \
+	  --validate=false
 	sleep 5		# allow pods to get running
 
          # get list of follower pods 
